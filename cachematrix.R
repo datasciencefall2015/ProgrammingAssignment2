@@ -1,15 +1,36 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Matrix inversion is usually a costly computation.
+## This module contains pair of functions that cache the inverse of a matrix.
 
-## Write a short comment describing this function
+## Returns a storage for matrix and it's corresponding inverse form
 
 makeCacheMatrix <- function(x = matrix()) {
+    inverse <- NULL
 
+    getMatrix <- function() x
+    getInverse <- function() inverse
+
+    setMatrix <- function(value) {
+        x <<- value
+        inverse <<- NULL
+    }
+    setInverse <- function(value) {
+        inverse <<- value
+    }
+
+    list(setMatrix = setMatrix,
+         getMatrix = getMatrix,
+         setInverse = setInverse,
+         getInverse = getInverse)
 }
 
-
-## Write a short comment describing this function
+## Returns inverse matrix, all costly computations are executed only once
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+    inverse <- x$getInverse()
+    if(is.null(inverse)) {
+        message("calculating inverse matrix")
+        inverse <- solve(x$getMatrix(), ...)
+        x$setInverse(inverse)
+    }
+    inverse
 }
